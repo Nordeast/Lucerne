@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swiss Alps 2-Day Itinerary | Lucerne, Stoos & Jungfrau</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        swiss: {
+                            red: '#D52B1E',
+                            darkRed: '#B01F14',
+                            glacier: '#EAF3F8',
+                            blue: '#1E6091',
+                            deepBlue: '#0F2C59',
+                            slate: '#1E293B',
+                            bg: '#F8FAF9'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles & Glassmorphism */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F4F7F6;
+            color: #1E293B;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .swiss-gradient {
+            background: linear-gradient(135deg, #D52B1E 0%, #A81B10 100%);
+        }
+        .completed-item {
+            opacity: 0.55;
+            filter: grayscale(0.2);
+        }
+        .completed-item .timeline-title {
+            text-decoration: line-through;
+        }
+        
+        /* Print Styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .glass-card {
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+                background: white !important;
+                page-break-inside: avoid;
+            }
+            .tab-content {
+                display: block !important;
+            }
+            .day-page-break {
+                page-break-before: always;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+    <header class="swiss-gradient text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-5 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 text-center sm:text-left">
+                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 border border-white/30 shadow-inner">
+                    <i data-lucide="mountain-snow" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">Swiss Alps 2-Day Itinerary</h1>
+                    <p class="text-xs sm:text-sm text-red-100 font-medium">Base: Lucerne • Stoos Ridge & Jungfrau Region</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 no-print w-full sm:w-auto justify-center">
+                <button onclick="window.print()" class="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition border border-white/20">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Print / PDF
+                </button>
+                <button onclick="resetCheckmarks()" class="px-3 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition border border-white/20" title="Reset completed items">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Reset Progress
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 flex-grow w-full">
+        
+        <!-- Navigation Controls -->
+        <div class="no-print mb-6 flex flex-col sm:flex-row gap-3 justify-between items-center">
+            <!-- Tabs -->
+            <div class="inline-flex p-1 bg-slate-200/80 rounded-xl w-full sm:w-auto">
+                <button id="tab-day1" onclick="switchTab('day1')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white text-swiss-red shadow-sm">
+                    <i data-lucide="compass" class="w-4 h-4"></i> Day 1: Stoos
+                </button>
+                <button id="tab-day2" onclick="switchTab('day2')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i data-lucide="mountain" class="w-4 h-4"></i> Day 2: Jungfrau
+                </button>
+                <button id="tab-links" onclick="switchTab('links')" class="flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i data-lucide="map-pin" class="w-4 h-4"></i> Lucerne Links
+                </button>
+            </div>
+        </div>
+
+        <section id="content-day1" class="tab-content space-y-4">
+            
+            <!-- Summary Banner -->
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-swiss-red shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 text-swiss-red font-bold text-xs uppercase tracking-wider mb-1">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> Day 1 Itinerary
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Stoos Ridge & Fronalpstock Panorama</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Experience the world's steepest funicular, magnificent panoramic ridge walking, and return via a sunset boat ride on Lake Lucerne.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 shrink-0">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-swiss-red border border-red-100">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> Full Day (~9 hrs)
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-swiss-blue border border-blue-100">
+                            <i data-lucide="footprints" class="w-3.5 h-3.5"></i> Ridge Walk
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links / Maps -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <a href="https://maps.app.goo.gl/rWSr2d1EDgf6EMgt5" target="_blank" rel="noopener noreferrer" class="glass-card p-3.5 rounded-xl flex items-center justify-between hover:border-swiss-red transition group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-swiss-red flex items-center justify-center group-hover:bg-swiss-red group-hover:text-white transition">
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Land Route</div>
+                            <div class="text-[11px] text-slate-500">Lucerne to Ridge</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-swiss-red"></i>
+                </a>
+
+                <a href="https://maps.app.goo.gl/G7QvqmxJQfx1KNB47" target="_blank" rel="noopener noreferrer" class="glass-card p-3.5 rounded-xl flex items-center justify-between hover:border-swiss-blue transition group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 text-swiss-blue flex items-center justify-center group-hover:bg-swiss-blue group-hover:text-white transition">
+                            <i data-lucide="ship" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Boat Route</div>
+                            <div class="text-[11px] text-slate-500">Brunnen to Lucerne</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-swiss-blue"></i>
+                </a>
+
+                <a href="https://maps.app.goo.gl/iAn74j7zJLmeHc1s6" target="_blank" rel="noopener noreferrer" class="glass-card p-3.5 rounded-xl flex items-center justify-between hover:border-slate-400 transition group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center group-hover:bg-slate-700 group-hover:text-white transition">
+                            <i data-lucide="train-front" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Backup Train</div>
+                            <div class="text-[11px] text-slate-500">Brunnen Station</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-slate-700"></i>
+                </a>
+            </div>
+
+            <!-- Timeline List -->
+            <div class="space-y-3 pt-2">
+                
+                <!-- Step 1 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s1">
+                    <input type="checkbox" onchange="toggleComplete('d1-s1')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">08:00 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-swiss-blue text-xs font-medium">
+                                <i data-lucide="train-front" class="w-3 h-3"></i> Train
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Depart Lucerne Main Station</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Board the morning train out of Lucerne Main Station toward Schwyz / Stoosbahn.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s2">
+                    <input type="checkbox" onchange="toggleComplete('d1-s2')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">09:15 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-50 text-swiss-red text-xs font-medium">
+                                <i data-lucide="mountain-snow" class="w-3 h-3"></i> Stoosbahn Funicular
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Arrive at Stoosbahn & World's Steepest Funicular</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Ride the futuristic Stoosbahn funicular railway (110% gradient maximum incline) up to the car-free mountain village of Stoos.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s3">
+                    <input type="checkbox" onchange="toggleComplete('d1-s3')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">09:45 AM – 01:30 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-50 text-amber-700 text-xs font-medium">
+                                <i data-lucide="footprints" class="w-3 h-3"></i> Ridge Hike & Viewpoint
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Fronalpstock Lift & Panoramic Ridge Hike</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Take the chairlift up to Fronalpstock. Walk open sections of the ridge path for breathtaking 360° vistas over Lake Lucerne and 10+ surrounding lakes.</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s4">
+                    <input type="checkbox" onchange="toggleComplete('d1-s4')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">01:45 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-swiss-blue text-xs font-medium">
+                                <i data-lucide="cable-car" class="w-3 h-3"></i> Chairlift
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Chairlift Down to Stoos Village</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Descend back down into Stoos village center via chairlift.</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s5">
+                    <input type="checkbox" onchange="toggleComplete('d1-s5')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">02:30 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-medium">
+                                <i data-lucide="bus" class="w-3 h-3"></i> Cable Car & Bus
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Morschach Cable Car & Bus to Brunnen Pier</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Take the aerial cable car down towards Morschach, then hop on the connecting bus directly to Brunnen Pier.</p>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s6">
+                    <input type="checkbox" onchange="toggleComplete('d1-s6')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">03:30 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-xs font-medium">
+                                <i data-lucide="coffee" class="w-3 h-3"></i> Buffer & Chocolate
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Arrive in Brunnen (Lakefront Stroll)</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Safe 1-hour buffer time. Grab a coffee or buy Swiss handmade chocolates at the lakefront shops before boarding.</p>
+                    </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d1-s7">
+                    <input type="checkbox" onchange="toggleComplete('d1-s7')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-red focus:ring-swiss-red cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md text-white bg-swiss-red text-xs font-bold">04:45 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-swiss-blue text-xs font-medium">
+                                <i data-lucide="ship" class="w-3 h-3"></i> Lake Steamer Boat
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Afternoon Scenic Cruise: Brunnen to Lucerne</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Board the final boat from Brunnen back to Lucerne, cruising across Lake Lucerne as the sun sets over the surrounding mountains.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Backup Advice Box -->
+            <div class="mt-6 p-4 bg-amber-50/80 border border-amber-200/80 rounded-xl flex items-start gap-3">
+                <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-800">Backup Option (If Boat Missed)</h4>
+                    <p class="text-xs sm:text-sm text-amber-900 mt-0.5">If you miss the 4:45 PM boat, walk ~10 minutes to <a href="https://maps.app.goo.gl/iAn74j7zJLmeHc1s6" target="_blank" class="underline font-semibold hover:text-amber-950">Brunnen Train Station</a> and board the regular train directly back to Lucerne.</p>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="content-day2" class="tab-content hidden space-y-4">
+            
+            <!-- Summary Banner -->
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-swiss-blue shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 text-swiss-blue font-bold text-xs uppercase tracking-wider mb-1">
+                            <i data-lucide="calendar" class="w-4 h-4"></i> Day 2 Itinerary
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Jungfrau Region Grand Loop</h2>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Lauterbrunnen waterfalls, Grütschalp cable car, Mürren alpine village, and Gimmelwald farmhouses.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 shrink-0">
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-swiss-blue border border-blue-100">
+                            <i data-lucide="clock" class="w-3.5 h-3.5"></i> Full Day (~11 hrs)
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Multi-Transport
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simplified Day 2 Route Map Links -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="https://maps.app.goo.gl/4EL1D4oyfBmoYvRs9" target="_blank" rel="noopener noreferrer" class="glass-card p-3.5 rounded-xl flex items-center justify-between hover:border-swiss-blue transition group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-blue-50 text-swiss-blue flex items-center justify-center group-hover:bg-swiss-blue group-hover:text-white transition">
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Outbound Route Map</div>
+                            <div class="text-[11px] text-slate-500">Lucerne → Mürren</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-swiss-blue"></i>
+                </a>
+
+                <a href="https://maps.app.goo.gl/Ga9iTocKZsk7Cmd38" target="_blank" rel="noopener noreferrer" class="glass-card p-3.5 rounded-xl flex items-center justify-between hover:border-swiss-red transition group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-lg bg-red-50 text-swiss-red flex items-center justify-center group-hover:bg-swiss-red group-hover:text-white transition">
+                            <i data-lucide="map" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900">Return Route Map</div>
+                            <div class="text-[11px] text-slate-500">Gimmelwald → Lucerne</div>
+                        </div>
+                    </div>
+                    <i data-lucide="external-link" class="w-4 h-4 text-slate-400 group-hover:text-swiss-red"></i>
+                </a>
+            </div>
+
+            <!-- Leg-by-Leg Steps -->
+            <div class="space-y-3 pt-2">
+
+                <!-- Leg 1 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l1">
+                    <input type="checkbox" onchange="toggleComplete('d2-l1')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">07:06 AM – 08:54 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-swiss-blue text-xs font-medium">
+                                <i data-lucide="train-front" class="w-3 h-3"></i> Luzern-Interlaken Express
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Lucerne to Interlaken Ost</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Scenic express train journey through the Hasli Valley and past Lake Brienz.</p>
+                    </div>
+                </div>
+
+                <!-- Leg 2 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l2">
+                    <input type="checkbox" onchange="toggleComplete('d2-l2')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">09:05 AM – 09:25 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-swiss-blue text-xs font-medium">
+                                <i data-lucide="train" class="w-3 h-3"></i> BOB Line Train
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Interlaken Ost to Lauterbrunnen</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Local train connection directly into the valley of 72 waterfalls.</p>
+                    </div>
+                </div>
+
+                <!-- Activity: Lauterbrunnen -->
+                <div class="timeline-item bg-amber-50/60 border border-amber-200/70 p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition ml-2 sm:ml-6" id="d2-a1">
+                    <input type="checkbox" onchange="toggleComplete('d2-a1')" class="mt-1 w-5 h-5 rounded border-amber-400 text-amber-600 focus:ring-amber-500 cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-amber-200/80 text-amber-900 text-xs font-bold">Activity • 09:25 AM – 10:50 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white text-amber-800 text-xs font-medium">
+                                <i data-lucide="camera" class="w-3 h-3"></i> Village Walk
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Lauterbrunnen Village & Staubbach Falls</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Stroll through the scenic village street, take iconic photos, and view the massive Staubbach Falls cascading down the cliff face.</p>
+                    </div>
+                </div>
+
+                <!-- Leg 3 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l3">
+                    <input type="checkbox" onchange="toggleComplete('d2-l3')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">11:00 AM – 11:04 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-xs font-medium">
+                                <i data-lucide="cable-car" class="w-3 h-3"></i> Cable Car (BLM)
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Lauterbrunnen to Grütschalp</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Aerial cable car ascent offering dramatic cliffside views back over the valley.</p>
+                    </div>
+                </div>
+
+                <!-- Leg 4 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l4">
+                    <input type="checkbox" onchange="toggleComplete('d2-l4')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">11:08 AM – 11:22 AM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-swiss-blue text-xs font-medium">
+                                <i data-lucide="train" class="w-3 h-3"></i> Cogwheel Train
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Grütschalp to Mürren</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Scenic narrow-gauge mountain railway along the cliff edge facing Eiger, Mönch & Jungfrau.</p>
+                    </div>
+                </div>
+
+                <!-- Activity: Mürren Lunch -->
+                <div class="timeline-item bg-amber-50/60 border border-amber-200/70 p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition ml-2 sm:ml-6" id="d2-a2">
+                    <input type="checkbox" onchange="toggleComplete('d2-a2')" class="mt-1 w-5 h-5 rounded border-amber-400 text-amber-600 focus:ring-amber-500 cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-amber-200/80 text-amber-900 text-xs font-bold">Activity • 11:30 AM – 01:30 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white text-amber-800 text-xs font-medium">
+                                <i data-lucide="utensils" class="w-3 h-3"></i> Alpine Terrace Lunch
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Explore Mürren & Terrace Lunch</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Sit-down lunch on a sun terrace overlooking the high mountain peaks, followed by exploring Mürren village.</p>
+                    </div>
+                </div>
+
+                <!-- Leg 5 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l5">
+                    <input type="checkbox" onchange="toggleComplete('d2-l5')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">01:30 PM – 02:15 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-xs font-medium">
+                                <i data-lucide="footprints" class="w-3 h-3"></i> Downhill Walk
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Mürren to Gimmelwald Walk</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Easy downhill paved stroll through pastures and traditional Swiss farm scenery.</p>
+                    </div>
+                </div>
+
+                <!-- Activity: Gimmelwald -->
+                <div class="timeline-item bg-amber-50/60 border border-amber-200/70 p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition ml-2 sm:ml-6" id="d2-a3">
+                    <input type="checkbox" onchange="toggleComplete('d2-a3')" class="mt-1 w-5 h-5 rounded border-amber-400 text-amber-600 focus:ring-amber-500 cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-amber-200/80 text-amber-900 text-xs font-bold">Activity • 02:15 PM – 03:20 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-white text-amber-800 text-xs font-medium">
+                                <i data-lucide="shopping-bag" class="w-3 h-3"></i> Village Sightseeing
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Gimmelwald Farm Chalets & Honesty Shop</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Explore rustic farm chalets, visit the self-service Honesty Shop for local cheese/crafts, or grab a drink at Mountain Hostel.</p>
+                    </div>
+                </div>
+
+                <!-- Leg 6 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l6">
+                    <input type="checkbox" onchange="toggleComplete('d2-l6')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">03:25 PM – 03:30 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-purple-50 text-purple-700 text-xs font-medium">
+                                <i data-lucide="cable-car" class="w-3 h-3"></i> Schilthornbahn Cable Car
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Gimmelwald to Stechelberg</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">Steep downhill cable car ride descending back to the valley floor.</p>
+                    </div>
+                </div>
+
+                <!-- Leg 7 -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm flex gap-3 sm:gap-4 items-start transition" id="d2-l7">
+                    <input type="checkbox" onchange="toggleComplete('d2-l7')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                            <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">03:45 PM – 03:58 PM</span>
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-medium">
+                                <i data-lucide="bus" class="w-3 h-3"></i> PostBus #141
+                            </span>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Stechelberg to Lauterbrunnen</h3>
+                        <p class="text-xs sm:text-sm text-slate-600 mt-1">PostBus ride back along the valley floor to Lauterbrunnen station.</p>
+                    </div>
+                </div>
+
+                <!-- Return Journey Card -->
+                <div class="timeline-item glass-card p-4 rounded-xl shadow-sm border-2 border-dashed border-swiss-blue/30 flex gap-3 sm:gap-4 items-start transition" id="d2-ret">
+                    <input type="checkbox" onchange="toggleComplete('d2-ret')" class="mt-1 w-5 h-5 rounded border-slate-300 text-swiss-blue focus:ring-swiss-blue cursor-pointer shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-md bg-swiss-blue text-white text-xs font-bold">Return Journey</span>
+                                <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">04:02 PM – 06:17 PM</span>
+                            </div>
+                            <a href="https://maps.app.goo.gl/Ga9iTocKZsk7Cmd38" target="_blank" class="inline-flex items-center gap-1 text-xs font-semibold text-swiss-blue hover:underline">
+                                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Full Return Map
+                            </a>
+                        </div>
+                        <h3 class="timeline-title font-bold text-slate-900 text-base">Lauterbrunnen → Interlaken Ost → Lucerne</h3>
+                        <div class="text-xs sm:text-sm text-slate-600 mt-1 space-y-1">
+                            <p>• <strong>04:02 PM – 04:24 PM:</strong> Lauterbrunnen → Interlaken Ost</p>
+                            <p>• <strong>04:30 PM – 06:17 PM:</strong> Interlaken Ost → Lucerne (Luzern-Interlaken Express)</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section id="content-links" class="tab-content hidden space-y-4">
+            
+            <div class="glass-card rounded-2xl p-5 border-l-4 border-l-slate-800 shadow-sm">
+                <div class="flex items-center gap-2 text-slate-800 font-bold text-xs uppercase tracking-wider mb-1">
+                    <i data-lucide="info" class="w-4 h-4"></i> Essential Local Information
+                </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900">Lucerne Resources & Links</h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1">Handy interactive maps, fountain water locations, markets, and local attractions for your base stay in Lucerne.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                
+                <!-- Tuesday Market -->
+                <a href="https://www.luzerner-wochenmarkt.ch/" target="_blank" rel="noopener noreferrer" class="glass-card p-5 rounded-2xl flex flex-col justify-between hover:shadow-md hover:border-swiss-red transition group">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-red-50 text-swiss-red flex items-center justify-center mb-3 group-hover:bg-swiss-red group-hover:text-white transition">
+                            <i data-lucide="shopping-basket" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Lucerne Tuesday Market</h3>
+                        <p class="text-xs text-slate-600">Fresh regional produce, cheeses, flowers, and local Swiss delicacies along the Reuss river bank.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-swiss-red">
+                        <span>Visit Website</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </div>
+                </a>
+
+                <!-- Water & Toilets -->
+                <a href="https://lucernewater.ch/#/map" target="_blank" rel="noopener noreferrer" class="glass-card p-5 rounded-2xl flex flex-col justify-between hover:shadow-md hover:border-swiss-blue transition group">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-swiss-blue flex items-center justify-center mb-3 group-hover:bg-swiss-blue group-hover:text-white transition">
+                            <i data-lucide="droplets" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Water & Toilets Map</h3>
+                        <p class="text-xs text-slate-600">Interactive map showing public drinking water fountains (potable water) and restrooms across Lucerne.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-swiss-blue">
+                        <span>Open Interactive Map</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </div>
+                </a>
+
+                <!-- Local Attractions -->
+                <a href="https://maps.app.goo.gl/tVU25cdThMeRhabE8" target="_blank" rel="noopener noreferrer" class="glass-card p-5 rounded-2xl flex flex-col justify-between hover:shadow-md hover:border-emerald-600 transition group">
+                    <div>
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:bg-emerald-600 group-hover:text-white transition">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base mb-1">Lucerne Attractions Map</h3>
+                        <p class="text-xs text-slate-600">Curated Google Maps list of Chapel Bridge, Lion Monument, Musegg Wall, and top historic spots.</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-emerald-600">
+                        <span>View Google Map</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </div>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="max-w-5xl mx-auto px-4 sm:px-6 mt-12 text-center text-xs text-slate-500 no-print">
+        <p>© Swiss Alps 2-Day Itinerary • Designed for mobile & offline travel</p>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            // Reset button active styles
+            const btnDay1 = document.getElementById('tab-day1');
+            const btnDay2 = document.getElementById('tab-day2');
+            const btnLinks = document.getElementById('tab-links');
+
+            [btnDay1, btnDay2, btnLinks].forEach(btn => {
+                btn.className = "flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900";
+            });
+
+            // Show target content and highlight active tab
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-' + tabId);
+
+            if(tabId === 'day1') {
+                activeBtn.className = "flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white text-swiss-red shadow-sm";
+            } else if(tabId === 'day2') {
+                activeBtn.className = "flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white text-swiss-blue shadow-sm";
+            } else {
+                activeBtn.className = "flex-1 sm:flex-initial px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white text-slate-900 shadow-sm";
+            }
+
+            // Clear search filter when changing tabs
+            document.getElementById('searchInput').value = '';
+            filterContent();
+        }
+
+        // Toggle Checklist Completed Items
+        function toggleComplete(itemId) {
+            const el = document.getElementById(itemId);
+            if (!el) return;
+            const checkbox = el.querySelector('input[type="checkbox"]');
+            
+            if (checkbox.checked) {
+                el.classList.add('completed-item');
+                localStorage.setItem('swiss_check_' + itemId, 'true');
+            } else {
+                el.classList.remove('completed-item');
+                localStorage.removeItem('swiss_check_' + itemId);
+            }
+        }
+
+        // Reset Checkmarks
+        function resetCheckmarks() {
+            document.querySelectorAll('.timeline-item').forEach(el => {
+                el.classList.remove('completed-item');
+                const cb = el.querySelector('input[type="checkbox"]');
+                if(cb) cb.checked = false;
+            });
+            Object.keys(localStorage).forEach(key => {
+                if(key.startsWith('swiss_check_')) {
+                    localStorage.removeItem(key);
+                }
+            });
+        }
+
+        // Restore saved checkmarks from LocalStorage on page load
+        window.onload = function() {
+            document.querySelectorAll('.timeline-item').forEach(el => {
+                const isChecked = localStorage.getItem('swiss_check_' + el.id);
+                if (isChecked === 'true') {
+                    el.classList.add('completed-item');
+                    const cb = el.querySelector('input[type="checkbox"]');
+                    if(cb) cb.checked = true;
+                }
+            });
+        };
+    </script>
+</body>
+</html>
